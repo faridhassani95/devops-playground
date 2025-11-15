@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-playground
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devops-playground
+  template:
+    metadata:
+      labels:
+        app: devops-playground
+    spec:
+      containers:
+      - name: devops-playground
+        image: faridhassani95/devops-playground:latest
+        ports:
+        - containerPort: 80
