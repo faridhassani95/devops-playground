@@ -1,17 +1,20 @@
-# 1. پایه: Alpine سبک
+# از Alpine به عنوان Base استفاده می‌کنیم
 FROM alpine:latest
 
-# 2. نصب bash و curl و یک وب سرور ساده (busybox HTTP server)
-RUN apk add --no-cache bash curl busybox-extras
+# نصب bash و وب‌سرور ساده (nginx)
+RUN apk add --no-cache bash nginx
 
-# 3. دایرکتوری کاری
-WORKDIR /app
+# ایجاد دایرکتوری برای وب‌سایت
+RUN mkdir -p /app/html
 
-# 4. کپی همه فایل‌ها
-COPY . .
+# یک فایل ساده HTML برای تست بسازیم
+RUN echo '<!DOCTYPE html><html><body><h1>Hello from DevOps Playground!</h1></body></html>' > /app/html/index.html
 
-# 5. ایجاد یک فایل ساده index.html
-RUN echo "<h1>Hello from DevOps Playground!</h1>" > index.html
+# nginx کانفیگ کنیم تا محتویات /app/html رو سرو کنه
+RUN sed -i 's|/var/lib/nginx/html|/app/html|g' /etc/nginx/nginx.conf
 
-# 6. فرمان پیش‌فرض: اجرا وب سرور روی پورت 80
-CMD ["httpd", "-f", "-p", "80"]
+# expose پورت 80
+EXPOSE 80
+
+# دستور پیش‌فرض
+CMD ["nginx", "-g", "daemon off;"]
