@@ -1,14 +1,17 @@
-# Use Alpine Linux as base
+# 1. پایه: Alpine سبک
 FROM alpine:latest
 
-# Install bash (یا هر چیزی که نیاز داری)
-RUN apk add --no-cache bash
+# 2. نصب bash و curl و یک وب سرور ساده (busybox HTTP server)
+RUN apk add --no-cache bash curl busybox-extras
 
-# Set workdir
+# 3. دایرکتوری کاری
 WORKDIR /app
 
-# Copy files (فعلاً فقط README)
+# 4. کپی همه فایل‌ها
 COPY . .
 
-# Default command
-CMD ["echo", "Hello from DevOps Playground!"]
+# 5. ایجاد یک فایل ساده index.html
+RUN echo "<h1>Hello from DevOps Playground!</h1>" > index.html
+
+# 6. فرمان پیش‌فرض: اجرا وب سرور روی پورت 80
+CMD ["httpd", "-f", "-p", "80"]
