@@ -1,20 +1,14 @@
-# از Alpine به عنوان Base استفاده می‌کنیم
+# Use Alpine as the base image
 FROM alpine:latest
 
-# نصب bash و وب‌سرور ساده (nginx)
-RUN apk add --no-cache bash nginx
+# Install bash only (nginx removed)
+RUN apk add --no-cache bash
 
-# ایجاد دایرکتوری برای وب‌سایت
+# Create a directory for the application content
 RUN mkdir -p /app/html
 
-# یک فایل ساده HTML برای تست بسازیم
+# Add a simple HTML file for testing
 RUN echo '<!DOCTYPE html><html><body><h1>Hello from DevOps Playground!</h1></body></html>' > /app/html/index.html
 
-# nginx کانفیگ کنیم تا محتویات /app/html رو سرو کنه
-RUN sed -i 's|/var/lib/nginx/html|/app/html|g' /etc/nginx/nginx.conf
-
-# expose پورت 80
-EXPOSE 80
-
-# دستور پیش‌فرض
-CMD ["nginx", "-g", "daemon off;"]
+# Set the default command to launch a shell
+CMD ["sh"]
